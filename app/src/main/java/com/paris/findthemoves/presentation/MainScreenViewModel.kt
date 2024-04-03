@@ -3,6 +3,7 @@ package com.paris.findthemoves.presentation
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.paris.findthemoves.data.ScreenRepository
 import com.paris.findthemoves.domain.usecases.findpaths.KnightPathsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
-    private val knightPathsUseCase: KnightPathsUseCase
+    private val knightPathsUseCase: KnightPathsUseCase,
+    private val mainScreenStateRepository: ScreenRepository
 ) :
     ViewModel() {
 
@@ -21,13 +23,25 @@ class MainScreenViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val size = _mainScreenState.value.sliderValue.toInt()
-            val newChessboard = Array(size) { i ->
-                Array(size) { j ->
-                    startingTileColor(i, j)
+
+            val restoredState = mainScreenStateRepository.getScreenStateById(1)
+
+            restoredState?.let {
+                _mainScreenState.value = _mainScreenState.value.copy(
+                    redTile = it.redTile,
+                    greenTile = it.greenTile,
+                    chessboard = it.chessboard,
+                    paths = it.paths
+                )
+            } ?: run {
+                val size = _mainScreenState.value.sliderValue.toInt()
+                val newChessboard = Array(size) { i ->
+                    Array(size) { j ->
+                        startingTileColor(i, j)
+                    }
                 }
+                _mainScreenState.value = _mainScreenState.value.copy(chessboard = newChessboard)
             }
-            _mainScreenState.value = _mainScreenState.value.copy(chessboard = newChessboard)
         }
     }
 
@@ -135,6 +149,7 @@ class MainScreenViewModel @Inject constructor(
                             maxDepth = _mainScreenState.value.maxDepth
                         )
                         _mainScreenState.value = _mainScreenState.value.copy(paths = paths)
+                        mainScreenStateRepository.insertScreenState(_mainScreenState.value)
                     }
                 }
             }
