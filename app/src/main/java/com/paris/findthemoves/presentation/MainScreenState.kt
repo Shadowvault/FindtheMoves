@@ -8,9 +8,9 @@ data class MainScreenState(
     val sliderValue: Float = 6f,
     val maxDepth: Int = 3,
     val switchValue: Boolean = true,
-    val chessboard: Array<Array<Color>> = Array(6) { i ->
+    val chessboard: Array<Array<Long>> = Array(6) { i ->
         Array(6) { j ->
-            Color.Transparent
+            0x00000000
         }
     },
     val paths: List<List<Pair<Int, Int>>> = emptyList()
@@ -42,4 +42,5 @@ data class MainScreenState(
         result = 31 * result + paths.hashCode()
         return result
     }
+
 }

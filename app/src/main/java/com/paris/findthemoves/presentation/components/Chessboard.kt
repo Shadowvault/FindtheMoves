@@ -14,7 +14,7 @@ import com.paris.findthemoves.presentation.components.utils.getScreenWidth
 @Composable
 fun Chessboard(
     size: Int,
-    tileColor: (Int, Int) -> Color,
+    tileColor: (Int, Int) -> Long,
     tilePress: (Int, Int) -> Unit,
 ) {
 
@@ -28,7 +28,7 @@ fun Chessboard(
                 for (j in 0 until size) {
                     Box(
                         modifier = Modifier
-                            .background(tileColor(i, j))
+                            .background(Color(tileColor(i, j)))
                             .size(tileSize)
                             .clickable { tilePress(i, j) }
                     )

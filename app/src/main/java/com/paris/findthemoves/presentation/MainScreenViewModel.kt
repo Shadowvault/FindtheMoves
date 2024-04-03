@@ -76,7 +76,7 @@ class MainScreenViewModel @Inject constructor(
                                     startingTileColor(greenTileX, greenTileY)
                             }
                             _mainScreenState.value.chessboard[eventTileX][eventTileY] =
-                                Color.Green
+                                0xFF00FF00
                             val newChessboard = _mainScreenState.value.chessboard
                             _mainScreenState.value = _mainScreenState.value.copy(
                                 greenTile = event.pair,
@@ -102,7 +102,7 @@ class MainScreenViewModel @Inject constructor(
                                     startingTileColor(redTileX, redTileY)
                             }
                             _mainScreenState.value.chessboard[eventTileX][eventTileY] =
-                                Color.Red
+                                0xFFFF0000
                             val newChessboard = _mainScreenState.value.chessboard
                             _mainScreenState.value = _mainScreenState.value.copy(
                                 redTile = event.pair,
@@ -167,8 +167,8 @@ class MainScreenViewModel @Inject constructor(
         }
     }
 
-    private fun startingTileColor(i: Int, j: Int): Color {
-        return if ((i + j) % 2 == 0) Color.LightGray else Color.DarkGray
+    private fun startingTileColor(i: Int, j: Int): Long {
+        return if ((i + j) % 2 == 0) 0xFFCCCCCC else 0xFF444444
     }
 
 }
