@@ -1,7 +1,5 @@
 package com.paris.findthemoves.presentation
 
-import androidx.compose.ui.graphics.Color
-
 data class MainScreenState(
     val redTile: Pair<Int, Int> = -1 to -1,
     val greenTile: Pair<Int, Int> = -1 to -1,

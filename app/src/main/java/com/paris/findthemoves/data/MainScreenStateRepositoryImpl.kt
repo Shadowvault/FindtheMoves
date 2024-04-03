@@ -1,7 +1,6 @@
 package com.paris.findthemoves.data
 
 import com.paris.findthemoves.presentation.MainScreenState
-import kotlinx.coroutines.flow.Flow
 
 class MainScreenStateRepositoryImpl(
     private val dao: ScreenDAO

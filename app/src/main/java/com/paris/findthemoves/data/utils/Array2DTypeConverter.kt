@@ -10,6 +10,7 @@ class Array2DTypeConverter {
 
     @TypeConverter
     fun toArray2D(data: String): Array<Array<Long>> {
-        return data.split(";").map { it.split(",").map { item -> item.toLong() }.toTypedArray() }.toTypedArray()
+        return data.split(";").map { it.split(",").map { item -> item.toLong() }.toTypedArray() }
+            .toTypedArray()
     }
 }

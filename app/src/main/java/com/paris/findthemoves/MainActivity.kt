@@ -6,12 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.paris.findthemoves.presentation.MainScreen
 import com.paris.findthemoves.presentation.MainScreenViewModel
@@ -31,8 +28,10 @@ class MainActivity : ComponentActivity() {
                     val mainScreenViewModel = hiltViewModel<MainScreenViewModel>()
                     val mainScreenState by mainScreenViewModel.mainScreenState.collectAsState()
 
-                    MainScreen(state = mainScreenState,
-                        onEvent = mainScreenViewModel::onEvent)
+                    MainScreen(
+                        state = mainScreenState,
+                        onEvent = mainScreenViewModel::onEvent
+                    )
                 }
             }
         }

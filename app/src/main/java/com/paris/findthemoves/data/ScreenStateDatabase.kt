@@ -11,7 +11,8 @@ import com.paris.findthemoves.data.utils.PairTypeConverter
     entities = [MainScreenStateEntity::class],
     version = 1
 )
-@TypeConverters(PairTypeConverter::class, Array2DTypeConverter::class, ListOfListOfPairsTypeConverter::class)
+@TypeConverters(PairTypeConverter::class, Array2DTypeConverter::class,
+    ListOfListOfPairsTypeConverter::class)
 abstract class ScreenStateDatabase: RoomDatabase() {
 
     abstract val dao: ScreenDAO
