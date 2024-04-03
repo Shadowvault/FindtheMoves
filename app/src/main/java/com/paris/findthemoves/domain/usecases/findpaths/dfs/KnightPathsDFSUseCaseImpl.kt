@@ -5,7 +5,12 @@ import javax.inject.Inject
 
 class KnightPathsDFSUseCaseImpl @Inject constructor(private val dfs: KnightPathsDFS) :
     KnightPathsUseCase {
-    override fun findPaths(size: Int, start: Pair<Int, Int>, end: Pair<Int, Int>, maxDepth: Int): List<List<Pair<Int, Int>>> {
-        return dfs(size, start, end, maxDepth)
+    override suspend fun findPathsAsync(
+        size: Int,
+        start: Pair<Int, Int>,
+        end: Pair<Int, Int>,
+        maxDepth: Int
+    ): List<List<Pair<Int, Int>>> {
+        return dfs.findPathsAsync(size, start, end, maxDepth)
     }
 }

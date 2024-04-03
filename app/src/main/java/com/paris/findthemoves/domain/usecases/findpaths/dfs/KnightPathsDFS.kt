@@ -1,12 +1,15 @@
 package com.paris.findthemoves.domain.usecases.findpaths.dfs
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
 class KnightPathsDFS {
-    operator fun invoke(
+    suspend fun findPathsAsync(
         size: Int,
         start: Pair<Int, Int>,
         end: Pair<Int, Int>,
         maxDepth: Int
-    ): List<List<Pair<Int, Int>>> {
+    ): List<List<Pair<Int, Int>>> = withContext(Dispatchers.IO) {
         val moves = arrayOf(
             intArrayOf(1, 2),
             intArrayOf(2, 1),
@@ -23,12 +26,13 @@ class KnightPathsDFS {
 
         val startPath = mutableListOf(start)
         visited[start.first][start.second] = true
-        dfs(start, 0, maxDepth, startPath, paths, moves, visited, end, size)
 
-        return paths
+        dfsAsync(start, 0, maxDepth, startPath, paths, moves, visited, end, size)
+
+        paths
     }
 
-    private fun dfs(
+    private suspend fun dfsAsync(
         current: Pair<Int, Int>,
         depth: Int,
         maxDepth: Int,
@@ -53,7 +57,7 @@ class KnightPathsDFS {
             if (isValidMove(newX, newY, size) && !visited[newX][newY]) {
                 visited[newX][newY] = true
                 path.add(Pair(newX, newY))
-                dfs(Pair(newX, newY), depth + 1, maxDepth, path, paths, moves, visited, end, size)
+                dfsAsync(Pair(newX, newY), depth + 1, maxDepth, path, paths, moves, visited, end, size)
                 path.removeAt(path.size - 1)
                 visited[newX][newY] = false
             }
