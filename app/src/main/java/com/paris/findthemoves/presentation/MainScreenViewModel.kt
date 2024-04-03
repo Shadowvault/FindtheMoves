@@ -1,11 +1,12 @@
 package com.paris.findthemoves.presentation
 
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.paris.findthemoves.data.ScreenRepository
+import com.paris.findthemoves.di.IoDispatcher
 import com.paris.findthemoves.domain.usecases.findpaths.KnightPathsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -14,7 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
     private val knightPathsUseCase: KnightPathsUseCase,
-    private val mainScreenStateRepository: ScreenRepository
+    private val mainScreenStateRepository: ScreenRepository,
+    @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) :
     ViewModel() {
 
@@ -22,7 +24,7 @@ class MainScreenViewModel @Inject constructor(
     val mainScreenState = _mainScreenState.asStateFlow()
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
 
             val restoredState = mainScreenStateRepository.getScreenStateById(1)
 
@@ -48,7 +50,7 @@ class MainScreenViewModel @Inject constructor(
     fun onEvent(event: MainScreenEvent) {
         when (event) {
             is MainScreenEvent.SliderValueChanged -> {
-                viewModelScope.launch {
+                viewModelScope.launch(dispatcher) {
                     _mainScreenState.value = _mainScreenState.value.copy(
                         greenTile = -1 to -1,
                         redTile = -1 to -1,
@@ -63,7 +65,7 @@ class MainScreenViewModel @Inject constructor(
             }
 
             is MainScreenEvent.SwitchValueChanged -> {
-                viewModelScope.launch {
+                viewModelScope.launch(dispatcher) {
                     _mainScreenState.value =
                         _mainScreenState.value.copy(switchValue = !_mainScreenState.value.switchValue)
                 }
@@ -84,7 +86,7 @@ class MainScreenViewModel @Inject constructor(
 
                 if (switch) {
                     if (eventTileX != greenTileX || eventTileY != greenTileY) {
-                        viewModelScope.launch {
+                        viewModelScope.launch(dispatcher) {
                             if (greenTileX != -1 && greenTileY != -1) {
                                 _mainScreenState.value.chessboard[greenTileX][greenTileY] =
                                     startingTileColor(greenTileX, greenTileY)
@@ -98,7 +100,7 @@ class MainScreenViewModel @Inject constructor(
                             )
                         }
                     } else {
-                        viewModelScope.launch {
+                        viewModelScope.launch(dispatcher) {
                             _mainScreenState.value.chessboard[eventTileX][eventTileY] =
                                 startingTileColor(eventTileX, eventTileY)
                             val newChessboard = _mainScreenState.value.chessboard
@@ -110,7 +112,7 @@ class MainScreenViewModel @Inject constructor(
                     }
                 } else {
                     if (eventTileX != redTileX || eventTileY != redTileY) {
-                        viewModelScope.launch {
+                        viewModelScope.launch(dispatcher) {
                             if (redTileX != -1 && redTileY != -1) {
                                 _mainScreenState.value.chessboard[redTileX][redTileY] =
                                     startingTileColor(redTileX, redTileY)
@@ -124,7 +126,7 @@ class MainScreenViewModel @Inject constructor(
                             )
                         }
                     } else {
-                        viewModelScope.launch {
+                        viewModelScope.launch(dispatcher) {
                             _mainScreenState.value.chessboard[event.pair.first][event.pair.second] =
                                 startingTileColor(event.pair.first, event.pair.second)
                             val newChessboard = _mainScreenState.value.chessboard
@@ -138,7 +140,7 @@ class MainScreenViewModel @Inject constructor(
             }
 
             MainScreenEvent.ButtonPress -> {
-                viewModelScope.launch {
+                viewModelScope.launch(dispatcher) {
                     if (_mainScreenState.value.greenTile != -1 to -1 &&
                         _mainScreenState.value.redTile != -1 to -1
                     ) {
@@ -155,13 +157,13 @@ class MainScreenViewModel @Inject constructor(
             }
 
             is MainScreenEvent.MaxNumberOfMovesChanged -> {
-                viewModelScope.launch {
+                viewModelScope.launch(dispatcher) {
                     _mainScreenState.value = _mainScreenState.value.copy(maxDepth = event.moves)
                 }
             }
 
             MainScreenEvent.ResetButtonPress -> {
-                viewModelScope.launch {
+                viewModelScope.launch(dispatcher) {
                     val size = mainScreenState.value.sliderValue.toInt()
                     val newChessboard = Array(size) { i ->
                         Array(size) { j ->
