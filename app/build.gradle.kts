@@ -81,5 +81,7 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     implementation(libs.kotlinx.serialization.json)
-    testImplementation(libs.mockk)
+
+    testImplementation(libs.truth)
+    testImplementation(libs.kotlinx.coroutines.test)
 }
