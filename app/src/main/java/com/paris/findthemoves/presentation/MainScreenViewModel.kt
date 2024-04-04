@@ -2,9 +2,12 @@ package com.paris.findthemoves.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.paris.findthemoves.R
 import com.paris.findthemoves.data.ScreenRepository
 import com.paris.findthemoves.di.IoDispatcher
+import com.paris.findthemoves.domain.usecases.chessmoves.PathsToChessMovesUseCase
 import com.paris.findthemoves.domain.usecases.findpaths.KnightPathsUseCase
+import com.paris.findthemoves.presentation.utils.UIText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +19,7 @@ import javax.inject.Inject
 class MainScreenViewModel @Inject constructor(
     private val knightPathsUseCase: KnightPathsUseCase,
     private val mainScreenStateRepository: ScreenRepository,
+    private val pathsToChessMovesUseCase: PathsToChessMovesUseCase,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) :
     ViewModel() {
@@ -33,6 +37,10 @@ class MainScreenViewModel @Inject constructor(
                     redTile = it.redTile,
                     greenTile = it.greenTile,
                     chessboard = it.chessboard,
+                    sliderValue = it.sliderValue,
+                    switchValue = it.switchValue,
+                    maxDepth = it.maxDepth,
+                    foundPathsText = it.foundPathsText,
                     paths = it.paths
                 )
             } ?: run {
@@ -44,6 +52,11 @@ class MainScreenViewModel @Inject constructor(
                 }
                 _mainScreenState.value = _mainScreenState.value.copy(chessboard = newChessboard)
             }
+            _mainScreenState.value = _mainScreenState.value.copy(
+                switchText = UIText.StringResource(R.string.start_point),
+                buttonText = UIText.StringResource(R.string.button),
+                resetButtonText = UIText.StringResource(R.string.reset_button)
+            )
         }
     }
 
@@ -68,6 +81,13 @@ class MainScreenViewModel @Inject constructor(
                 viewModelScope.launch(dispatcher) {
                     _mainScreenState.value =
                         _mainScreenState.value.copy(switchValue = !_mainScreenState.value.switchValue)
+                    if (_mainScreenState.value.switchValue) {
+                        _mainScreenState.value =
+                            _mainScreenState.value.copy(switchText = UIText.StringResource(R.string.start_point))
+                    } else {
+                        _mainScreenState.value =
+                            _mainScreenState.value.copy(switchText = UIText.StringResource(R.string.end_point))
+                    }
                 }
             }
 
@@ -150,6 +170,19 @@ class MainScreenViewModel @Inject constructor(
                             end = _mainScreenState.value.redTile,
                             maxDepth = _mainScreenState.value.maxDepth
                         )
+                        if (paths.isEmpty()) {
+                            _mainScreenState.value =
+                                _mainScreenState.value.copy(foundPathsText = UIText.StringResource(R.string.paths_not_found))
+                        } else {
+                            _mainScreenState.value = _mainScreenState.value.copy(
+                                foundPathsText = UIText.DynamicString(
+                                    pathsToChessMovesUseCase.convertPathsToChessMoves(
+                                        paths = paths,
+                                        size = _mainScreenState.value.chessboard.size
+                                    )
+                                )
+                            )
+                        }
                         _mainScreenState.value = _mainScreenState.value.copy(paths = paths)
                         mainScreenStateRepository.insertScreenState(_mainScreenState.value)
                     }
@@ -177,7 +210,8 @@ class MainScreenViewModel @Inject constructor(
                         maxDepth = 3,
                         switchValue = true,
                         chessboard = newChessboard,
-                        paths = emptyList()
+                        paths = emptyList(),
+                        foundPathsText = UIText.DynamicString("")
                     )
                 }
             }

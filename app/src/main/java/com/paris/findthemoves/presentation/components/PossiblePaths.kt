@@ -6,19 +6,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.paris.findthemoves.presentation.utils.UIText
 
 @Composable
 fun PossiblePaths(
-    paths: List<List<Pair<Int, Int>>>,
+    paths: UIText,
 ) {
-    if (paths.isNotEmpty()) {
-        val state = rememberScrollState()
-        Column(modifier = Modifier.verticalScroll(state = state)) {
-            paths.forEach { path ->
-                Text(text = path.toString())
-            }
-        }
-    } else {
-        Text(text = "No paths found")
+    val state = rememberScrollState()
+    Column(modifier = Modifier.verticalScroll(state = state)) {
+        Text(text = paths.asString())
     }
 }

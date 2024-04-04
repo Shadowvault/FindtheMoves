@@ -1,6 +1,7 @@
 package com.paris.findthemoves.data
 
 import com.paris.findthemoves.presentation.MainScreenState
+import com.paris.findthemoves.presentation.utils.UIText
 
 class MainScreenStateRepositoryImpl(
     private val dao: ScreenDAO
@@ -15,7 +16,8 @@ class MainScreenStateRepositoryImpl(
                 maxDepth = screenState.maxDepth,
                 switchValue = screenState.switchValue,
                 chessboard = screenState.chessboard,
-                paths = screenState.paths
+                paths = screenState.paths,
+                foundPaths = screenState.foundPathsText
             )
         )
     }
