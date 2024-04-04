@@ -1,15 +1,20 @@
 package com.paris.findthemoves.domain.usecases.findpaths.dfs
 
+import com.paris.findthemoves.di.IoDispatcher
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class KnightPathsDFS {
+class KnightPathsDFS @Inject constructor(
+    @IoDispatcher private val dispatcher: CoroutineDispatcher
+) {
     suspend fun findPathsAsync(
         size: Int,
         start: Pair<Int, Int>,
         end: Pair<Int, Int>,
         maxDepth: Int
-    ): List<List<Pair<Int, Int>>> = withContext(Dispatchers.IO) {
+    ): List<List<Pair<Int, Int>>> = withContext(dispatcher) {
         val moves = arrayOf(
             intArrayOf(1, 2),
             intArrayOf(2, 1),

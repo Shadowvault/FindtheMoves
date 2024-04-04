@@ -20,7 +20,7 @@ object AppModule {
 
     @Provides
     fun provideKnightPathsDFS(): KnightPathsDFS {
-        return KnightPathsDFS()
+        return KnightPathsDFS(DispatcherModule.providesIoDispatcher())
     }
 
     @Provides
