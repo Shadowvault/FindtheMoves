@@ -6,13 +6,18 @@ import androidx.room.TypeConverters
 import com.paris.findthemoves.data.utils.Array2DTypeConverter
 import com.paris.findthemoves.data.utils.ListOfListOfPairsTypeConverter
 import com.paris.findthemoves.data.utils.PairTypeConverter
+import com.paris.findthemoves.data.utils.UITextTypeConverter
 
 @Database(
     entities = [MainScreenStateEntity::class],
     version = 1
 )
-@TypeConverters(PairTypeConverter::class, Array2DTypeConverter::class,
-    ListOfListOfPairsTypeConverter::class)
+@TypeConverters(
+    PairTypeConverter::class,
+    Array2DTypeConverter::class,
+    ListOfListOfPairsTypeConverter::class,
+    UITextTypeConverter::class
+)
 abstract class ScreenStateDatabase: RoomDatabase() {
 
     abstract val dao: ScreenDAO

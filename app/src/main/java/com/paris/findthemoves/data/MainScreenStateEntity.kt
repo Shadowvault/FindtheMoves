@@ -3,6 +3,7 @@ package com.paris.findthemoves.data
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.paris.findthemoves.presentation.MainScreenState
+import com.paris.findthemoves.presentation.utils.UIText
 
 @Entity
 data class MainScreenStateEntity(
@@ -13,7 +14,8 @@ data class MainScreenStateEntity(
     val maxDepth: Int,
     val switchValue: Boolean,
     val chessboard: Array<Array<Long>>,
-    val paths: List<List<Pair<Int, Int>>>
+    val paths: List<List<Pair<Int, Int>>>,
+    val foundPaths: UIText
 ) {
     fun toMainScreenState(): MainScreenState {
         return MainScreenState(
@@ -23,7 +25,8 @@ data class MainScreenStateEntity(
             maxDepth = maxDepth,
             switchValue = switchValue,
             chessboard = chessboard,
-            paths = paths
+            paths = paths,
+            foundPathsText = foundPaths
         )
     }
 
@@ -41,6 +44,7 @@ data class MainScreenStateEntity(
         if (switchValue != other.switchValue) return false
         if (!chessboard.contentDeepEquals(other.chessboard)) return false
         if (paths != other.paths) return false
+        if (foundPaths != other.foundPaths) return false
 
         return true
     }
@@ -54,6 +58,7 @@ data class MainScreenStateEntity(
         result = 31 * result + switchValue.hashCode()
         result = 31 * result + chessboard.contentDeepHashCode()
         result = 31 * result + paths.hashCode()
+        result = 31 * result + foundPaths.hashCode()
         return result
     }
 }
