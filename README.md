@@ -77,4 +77,5 @@ Room database is used for storing the last moves that were calculated, plus most
 # Testing
 
 A fake repository modeling the behavior of Room with a list is used. Dispatchers for coroutines is switched for the test dispatcher. There are tests for initial state, button and switches presses, moves calculactions and display.
+There are no tests for the UI, but the coverage for the usecases is 100% and the coverage for the viewmodel is 72%.
 
