@@ -5,6 +5,9 @@ import androidx.room.Room
 import com.paris.findthemoves.data.MainScreenStateRepositoryImpl
 import com.paris.findthemoves.data.ScreenRepository
 import com.paris.findthemoves.data.ScreenStateDatabase
+import com.paris.findthemoves.domain.usecases.chessmoves.PathsToChessMoves
+import com.paris.findthemoves.domain.usecases.chessmoves.PathsToChessMovesUseCase
+import com.paris.findthemoves.domain.usecases.chessmoves.PathsToChessMovesUseCaseImpl
 import com.paris.findthemoves.domain.usecases.findpaths.KnightPathsUseCase
 import com.paris.findthemoves.domain.usecases.findpaths.dfs.KnightPathsDFS
 import com.paris.findthemoves.domain.usecases.findpaths.dfs.KnightPathsDFSUseCaseImpl
@@ -25,6 +28,16 @@ object AppModule {
 
     @Provides
     fun provideKnightPathsDFSUseCase(impl: KnightPathsDFSUseCaseImpl): KnightPathsUseCase {
+        return impl
+    }
+
+    @Provides
+    fun providePathsToChessMoves(): PathsToChessMoves {
+        return PathsToChessMoves(DispatcherModule.providesIoDispatcher())
+    }
+
+    @Provides
+    fun providePathsToChessMovesImpl(impl: PathsToChessMovesUseCaseImpl): PathsToChessMovesUseCase {
         return impl
     }
 
