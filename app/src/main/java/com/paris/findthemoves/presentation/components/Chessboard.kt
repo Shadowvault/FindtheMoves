@@ -21,7 +21,7 @@ fun Chessboard(
     val tileSize = getScreenWidth() / size
     val boardSize = getScreenWidth()
     Column(
-        modifier = androidx.compose.ui.Modifier.size(boardSize)
+        modifier = Modifier.size(boardSize)
     ) {
         for (i in 0 until size) {
             Row {

@@ -197,22 +197,22 @@ class MainScreenViewModel @Inject constructor(
 
             MainScreenEvent.ResetButtonPress -> {
                 viewModelScope.launch(dispatcher) {
-                    val size = mainScreenState.value.sliderValue.toInt()
-                    val newChessboard = Array(size) { i ->
-                        Array(size) { j ->
+                    val newChessboard = Array(6) { i ->
+                        Array(6) { j ->
                             startingTileColor(i, j)
                         }
                     }
                     _mainScreenState.value = _mainScreenState.value.copy(
                         redTile = -1 to -1,
                         greenTile = -1 to -1,
-                        sliderValue = size.toFloat(),
+                        sliderValue = 6f,
                         maxDepth = 3,
                         switchValue = true,
                         chessboard = newChessboard,
                         paths = emptyList(),
                         foundPathsText = UIText.DynamicString("")
                     )
+                    mainScreenStateRepository.insertScreenState(_mainScreenState.value)
                 }
             }
         }

@@ -10,18 +10,10 @@ class PathsToChessMoves @Inject constructor(
 ) {
     suspend fun convertPathsToChessMovesAsync(paths: List<List<Pair<Int, Int>>>, size: Int): String =
         withContext(dispatcher) {
-            val chessMoves = mutableListOf<String>()
-            for (moveList in paths) {
-                val moves = StringBuilder()
-                for (move in moveList) {
-                    val (x, y) = move
-                    val col = ('A' + y).toString()
-                    val row = (size - x).toString()
-                    moves.append("$col$row to ")
+            paths.joinToString("\n") { moveList ->
+                moveList.joinToString(" to ") { (x, y) ->
+                    ('A' + y).toString() + (size - x)
                 }
-                moves.delete(moves.length - 4, moves.length)
-                chessMoves.add(moves.toString())
             }
-            return@withContext chessMoves.joinToString(separator = "\n")
         }
 }
