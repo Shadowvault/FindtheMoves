@@ -1,7 +1,6 @@
 package com.paris.findthemoves.domain.usecases.findpaths.dfs
 
 import com.paris.findthemoves.domain.usecases.findpaths.KnightPathsUseCase
-import javax.inject.Inject
 
 class KnightPathsDFSUseCaseImpl (private val dfs: KnightPathsDFS) :
     KnightPathsUseCase {

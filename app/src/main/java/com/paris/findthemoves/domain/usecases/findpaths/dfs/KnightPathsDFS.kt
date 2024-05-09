@@ -47,23 +47,35 @@ class KnightPathsDFS @Inject constructor(
         end: Pair<Int, Int>,
         size: Int
     ) {
-        if (current == end && depth <= maxDepth) {
-            paths.add(path.toList())
-            return
-        }
+        withContext(dispatcher) {
+            if (current == end && depth <= maxDepth) {
+                paths.add(path.toList())
+                return@withContext
+            }
 
-        if (depth > maxDepth) return
+            if (depth > maxDepth) return@withContext
 
-        for (move in moves) {
-            val newX = current.first + move[0]
-            val newY = current.second + move[1]
+            for (move in moves) {
+                val newX = current.first + move[0]
+                val newY = current.second + move[1]
 
-            if (isValidMove(newX, newY, size) && !visited[newX][newY]) {
-                visited[newX][newY] = true
-                path.add(Pair(newX, newY))
-                dfsAsync(Pair(newX, newY), depth + 1, maxDepth, path, paths, moves, visited, end, size)
-                path.removeAt(path.size - 1)
-                visited[newX][newY] = false
+                if (isValidMove(newX, newY, size) && !visited[newX][newY]) {
+                    visited[newX][newY] = true
+                    path.add(Pair(newX, newY))
+                    dfsAsync(
+                        Pair(newX, newY),
+                        depth + 1,
+                        maxDepth,
+                        path,
+                        paths,
+                        moves,
+                        visited,
+                        end,
+                        size
+                    )
+                    path.removeAt(path.size - 1)
+                    visited[newX][newY] = false
+                }
             }
         }
     }
