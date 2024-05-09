@@ -1,9 +1,8 @@
 package com.paris.findthemoves.data
 
 import com.paris.findthemoves.presentation.MainScreenState
-import com.paris.findthemoves.presentation.utils.UIText
 
-class MainScreenStateRepositoryImpl(
+class MainScreenStateRepositoryImpl (
     private val dao: ScreenDAO
 ) : ScreenRepository {
     override suspend fun insertScreenState(screenState: MainScreenState) {
