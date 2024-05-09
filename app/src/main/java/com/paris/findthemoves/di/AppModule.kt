@@ -23,26 +23,14 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideKnightPathsDFS(): KnightPathsDFS {
-        return KnightPathsDFS(DispatcherModule.providesIoDispatcher())
+    fun provideKnightPathsDFSUseCase(dfs: KnightPathsDFS): KnightPathsUseCase {
+        return KnightPathsDFSUseCaseImpl(dfs)
     }
 
     @Provides
     @Singleton
-    fun provideKnightPathsDFSUseCase(impl: KnightPathsDFSUseCaseImpl): KnightPathsUseCase {
-        return impl
-    }
-
-    @Provides
-    @Singleton
-    fun providePathsToChessMoves(): PathsToChessMoves {
-        return PathsToChessMoves(DispatcherModule.providesIoDispatcher())
-    }
-
-    @Provides
-    @Singleton
-    fun providePathsToChessMovesImpl(impl: PathsToChessMovesUseCaseImpl): PathsToChessMovesUseCase {
-        return impl
+    fun providePathsToChessMovesImpl(pathsToMoves: PathsToChessMoves): PathsToChessMovesUseCase {
+        return PathsToChessMovesUseCaseImpl(pathsToMoves)
     }
 
     @Provides

@@ -10,6 +10,7 @@ import com.paris.findthemoves.domain.usecases.findpaths.KnightPathsUseCase
 import com.paris.findthemoves.presentation.utils.UIText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -26,6 +27,8 @@ class MainScreenViewModel @Inject constructor(
 
     private val _mainScreenState = MutableStateFlow(MainScreenState())
     val mainScreenState = _mainScreenState.asStateFlow()
+
+    private var job : Job? = null
 
     init {
         viewModelScope.launch(dispatcher) {
@@ -78,7 +81,8 @@ class MainScreenViewModel @Inject constructor(
             }
 
             is MainScreenEvent.SwitchValueChanged -> {
-                viewModelScope.launch(dispatcher) {
+                job?.cancel()
+                job = viewModelScope.launch(dispatcher) {
                     _mainScreenState.value =
                         _mainScreenState.value.copy(switchValue = !_mainScreenState.value.switchValue)
                     if (_mainScreenState.value.switchValue) {
@@ -160,7 +164,7 @@ class MainScreenViewModel @Inject constructor(
             }
 
             MainScreenEvent.ButtonPress -> {
-                viewModelScope.launch(dispatcher) {
+                val job = viewModelScope.launch(dispatcher) {
                     if (_mainScreenState.value.greenTile != -1 to -1 &&
                         _mainScreenState.value.redTile != -1 to -1
                     ) {
@@ -196,6 +200,7 @@ class MainScreenViewModel @Inject constructor(
             }
 
             MainScreenEvent.ResetButtonPress -> {
+                job?.cancel()
                 viewModelScope.launch(dispatcher) {
                     val newChessboard = Array(6) { i ->
                         Array(6) { j ->
